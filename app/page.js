@@ -3,21 +3,22 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-sm border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold tracking-wider hover:text-purple-400 transition-colors">
             D3PRT
           </Link>
           <div className="flex gap-8">
-            <Link href="/all-music" className="hover:text-purple-400 transition-colors">All Music</Link>
-            <Link href="/merch" className="hover:text-purple-400 transition-colors">Merch</Link>
-            <Link href="/live-shows" className="hover:text-purple-400 transition-colors">Live Shows</Link>
-            <Link href="/links" className="hover:text-purple-400 transition-colors">Links</Link>
+            <Link href="/music" className="hover:text-purple-400 transition-colors">Music</Link>
+            <Link href="/videos" className="hover:text-purple-400 transition-colors">Videos</Link>
+            <Link href="/about" className="hover:text-purple-400 transition-colors">About</Link>
             <Link href="/contact" className="hover:text-purple-400 transition-colors">Contact</Link>
           </div>
         </div>
       </nav>
 
+      {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,0,255,0.1),transparent_50%)]"></div>
@@ -30,11 +31,11 @@ export default function Home() {
             ELECTRONIC MUSIC PRODUCER
           </p>
           <div className="flex gap-6 justify-center">
-            <Link href="/all-music" className="px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-full font-semibold transition-all hover:scale-105">
+            <Link href="/music" className="px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-full font-semibold transition-all hover:scale-105">
               Listen Now
             </Link>
-            <Link href="/live-shows" className="px-8 py-4 border border-purple-600 hover:bg-purple-600/20 rounded-full font-semibold transition-all">
-              Live Shows
+            <Link href="/videos" className="px-8 py-4 border border-purple-600 hover:bg-purple-600/20 rounded-full font-semibold transition-all">
+              Watch Videos
             </Link>
           </div>
         </div>
@@ -46,6 +47,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Latest Releases */}
       <section className="py-20 px-6 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl font-bold mb-12 text-center">Latest Releases</h2>
