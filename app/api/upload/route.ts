@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,22 +21,39 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Determine the folder based on type
-    let folder = 'images';
-    if (type === 'video') folder = 'videos';
-    if (type === 'audio') folder = 'audio';
-
-    // Create safe filename
-    const filename = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    // Determine resource type and folder
+    let resourceType: 'image' | 'video' | 'raw' = 'image';
+    let folder = 'd3prt/images';
     
-    // Save to public folder
-    const path = join(process.cwd(), 'public', folder, filename);
-    await writeFile(path, buffer);
+    if (type === 'video') {
+      resourceType = 'video';
+      folder = 'd3prt/videos';
+    } else if (type === 'audio') {
+      resourceType = 'video'; // Cloudinary uses 'video' for audio too
+      folder = 'd3prt/audio';
+    }
 
-    return NextResponse.json({ 
-      success: true, 
-      filename,
-      path: `/${folder}/${filename}`
+    // Upload to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        {
+          resource_type: resourceType,
+          folder: folder,
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      ).end(buffer);
+    });
+
+    const uploadResult = result as any;
+
+    return NextResponse.json({
+      success: true,
+      filename: uploadResult.original_filename,
+      url: uploadResult.secure_url,
+      publicId: uploadResult.public_id,
     });
   } catch (error) {
     console.error('Upload error:', error);
